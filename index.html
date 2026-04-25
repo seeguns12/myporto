@@ -305,11 +305,20 @@
     font-size: 22px; text-align: center; line-height: 64px;
     z-index: 25; pointer-events: all; user-select: none;
   }
+  #mobile-jump-btn {
+    display: none; position: fixed;
+    right: 24px; bottom: 190px; width: 64px; height: 64px;
+    border-radius: 50%; background: rgba(100,200,255,0.15);
+    border: 2px solid rgba(100,200,255,0.6); color: rgba(100,200,255,0.95);
+    font-size: 26px; text-align: center; line-height: 64px;
+    z-index: 25; pointer-events: all; user-select: none;
+  }
   @media (pointer: coarse) {
     #joystick-zone, #look-zone { display: block; }
     #controls-hint { display: none; }
     #crosshair { display: none; }
     body { cursor: default; }
+    #mobile-jump-btn { display: block; }
   }
 </style>
 </head>
@@ -334,6 +343,7 @@
   <div id="look-zone"></div>
   <div id="mobile-interact-btn">E</div>
   <div id="mobile-flashlight-btn">&#128294;</div>
+  <div id="mobile-jump-btn">&#8679;</div>
 
   <div id="crosshair"></div>
 
@@ -1657,6 +1667,12 @@ mFlashBtn.addEventListener('touchstart', function(e) {
   flashlightOn=!flashlightOn; flashlight.intensity=flashlightOn?8:0; playFlashlightClick();
 }, { passive: false });
 
+const mJumpBtn = document.getElementById('mobile-jump-btn');
+mJumpBtn.addEventListener('touchstart', function(e) {
+  e.preventDefault(); if (!gameStarted) return;
+  if (isGrounded) { yVel = 7; isGrounded = false; }
+}, { passive: false });
+
 joystickBase.style.left='-200px'; joystickKnob.style.left='-200px';
 
 let ambientStarted = false;
@@ -1981,6 +1997,7 @@ function startExperience() {
   if (window.matchMedia('(pointer: coarse)').matches) {
     mInteractBtn.style.display = 'block';
     mFlashBtn.style.display = 'block';
+    mJumpBtn.style.display = 'block';
   }
 }
 
